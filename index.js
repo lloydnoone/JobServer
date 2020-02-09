@@ -1,3 +1,4 @@
+
 require('dotenv').config()
 const express = require('express')
 const app = express()
@@ -15,7 +16,7 @@ mongoose.connect(
   () => console.log('connected to DB')
 )
 
-app.use(express.static(`${__dirname}/dist`))
+app.use(express.static(`${__dirname}/../client/dist`))
 
 app.use(bodyParser.json())
 
@@ -23,7 +24,9 @@ app.use(logger)
 
 app.use('/api', router)
 
-app.get('/*', (req, res) => res.status(404).json({ message: 'Not Found' }))
+app.use('/jobs', router)
+
+app.get('/*', (req, res) => res.status(404).json({ message: 'Not on nginx Found' }))
 
 app.use(errorHandler)
 

@@ -2,6 +2,7 @@ const axios = require('axios')
 const User = require('../models/User')
 
 function index(req, res) {
+console.log('inside jobs index')
   axios.all([
     axios.get(`http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${process.env.AZID}&app_key=${process.env.AZKEY}&results_per_page=20&what=${req.params.title}&where=${req.params.location}&content-type=application/json`), //what=javascript%20developer need to regex this
     axios.get(`https://jobs.github.com/positions.json?description=${req.params.title}&location=${req.params.location}`), //&location=new+york need to regex this
@@ -17,7 +18,7 @@ function index(req, res) {
       console.log('mapping adzuna')
       const adzunaData = adzunaRes.data.results.map(job => {
         return ({
-          id: job.id,
+          id: job.id.toString(),
           title: job.title,
           location: job.location.display_name,
           company: job.company.display_name,
@@ -30,7 +31,7 @@ function index(req, res) {
       console.log('mapping github')
       const githubData = githubRes.data.map(job => {
         return ({
-          id: job.id,
+          id: job.id.toString(),
           title: job.title,
           location: job.location,
           company: job.company,
@@ -43,7 +44,7 @@ function index(req, res) {
       console.log('mapping reed')
       const reedData = reedRes.data.results.map(job => {
         return ({
-          id: job.jobId,
+          id: job.jobId.toString(),
           title: job.jobTitle,
           location: job.locationName,
           company: job.employerName,
